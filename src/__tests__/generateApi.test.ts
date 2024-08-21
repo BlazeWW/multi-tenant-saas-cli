@@ -2,6 +2,7 @@ import { execSync } from 'child_process'
 import * as fs from 'fs-extra'
 import * as path from 'path'
 
+
 describe('generateApi Command', () => {
 	const outputPath = path.resolve(__dirname, '../output/testApi.ts')
 
