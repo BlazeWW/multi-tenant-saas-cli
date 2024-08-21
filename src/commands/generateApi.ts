@@ -1,6 +1,7 @@
 import { Command } from 'commander'
 import * as fs from 'fs-extra'
 import * as path from 'path'
+import { authAwsCognito } from '../templates/api'
 
 const generateApi = new Command()
 
@@ -16,9 +17,7 @@ generateApi
       // Get single ${name.toLowerCase()} logic here`
 
 		if (options.auth) {
-			singleItemApiTemplate += `
-      // Authenticate with AWS Cognito
-      const user = await authenticateUser(event);`
+			singleItemApiTemplate += authAwsCognito
 		}
 
 		if (options.db) {
@@ -39,9 +38,7 @@ generateApi
       // Get list of ${name.toLowerCase()}s logic here`
 
 		if (options.auth) {
-			listApiTemplate += `
-      // Authenticate with AWS Cognito
-      const user = await authenticateUser(event);`
+			listApiTemplate += authAwsCognito
 		}
 
 		if (options.db) {
@@ -60,13 +57,7 @@ generateApi
 		// Functions for auth and DB interaction if selected
 		let additionalFunctions = ''
 
-		if (options.auth) {
-			additionalFunctions += `
-    // Function to authenticate user with AWS Cognito
-    const authenticateUser = async (event) => {
-      // Implement Cognito authentication logic here
-    };`
-		}
+		
 
 		if (options.db) {
 			additionalFunctions += `
