@@ -1,4 +1,4 @@
-export const databaseChoices = [
+export const databaseTypesChoices = [
 	{
 		name: 'String',
 		value: 'string',

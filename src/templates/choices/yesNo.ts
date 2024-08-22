@@ -2,11 +2,11 @@ export const yesNoChoices = [
 	{
 		name: 'Yes',
 		value: 'yes',
-		description: 'Add another field or relationship'
+		description: 'I choose Yes'
 	},
 	{
 		name: 'No',
 		value: 'no',
-		description: 'Finish adding fields'
+		description: 'I choose No'
 	}
 ]

@@ -4,8 +4,12 @@
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
-		"start": "node dist/index.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"start": "node tsc && node dist/index.js generate-config",
+		"gen:api": "node dist/index.js generate-api",
+		"gen:crud": "node dist/index.js generate-crud",
+		"gen:model": "node dist/index.js generate-model",
+		"gen:enitity": "node dist/index.js generate-enitity",
+		"test": "npx jest"
 	},
 	"keywords": [],
 	"author": "Blaze Web Works",
