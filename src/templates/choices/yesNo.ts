@@ -2,7 +2,7 @@ export const yesNoChoices = [
 	{
 		name: 'Yes',
 		value: 'yes',
-		description: 'Add another field to the entity'
+		description: 'Add another field or relationship'
 	},
 	{
 		name: 'No',

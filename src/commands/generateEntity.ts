@@ -1,3 +1,4 @@
+// src/commands/generateEntity.ts
 import { Command } from 'commander'
 import * as fs from 'fs-extra'
 import * as path from 'path'
@@ -21,7 +22,7 @@ generateEntity
 
 		while (addMoreFields) {
 			const fieldName = await input({
-				message: 'Enter field name:',
+				message: 'Enter field name (or related entity name for relationships):',
 				validate: (input) => (input ? true : 'Field name cannot be empty')
 			})
 
@@ -34,18 +35,15 @@ generateEntity
 
 			addMoreFields =
 				(await select({
-					message: 'Add another field?',
+					message: 'Add another field or relationship?',
 					choices: yesNoChoices
 				})) === 'yes'
 		}
 
 		const entity = entityTemplate(entityName, fields)
 
-
-	
-
 		const outputPath = path.resolve(__dirname, `../output/${entityName}.ts`)
-		fs.outputFileSync(outputPath, entityTemplate)
+		fs.outputFileSync(outputPath, entity)
 
 		console.log(`Entity ${entityName} generated at ${outputPath}`)
 	})
