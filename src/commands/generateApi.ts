@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import * as fs from 'fs-extra'
 import * as path from 'path'
-import { authAwsCognito } from '../templates/api'
+import { authAwsCognito, dbName, dbNameList } from '../templates/api'
 
 const generateApi = new Command()
 
@@ -21,9 +21,7 @@ generateApi
 		}
 
 		if (options.db) {
-			singleItemApiTemplate += `
-      // Database interaction to get a single ${name.toLowerCase()}
-      const data = await fetchDataFromDB(event.pathParameters.id);`
+			singleItemApiTemplate += dbName
 		}
 
 		singleItemApiTemplate += `
@@ -42,9 +40,7 @@ generateApi
 		}
 
 		if (options.db) {
-			listApiTemplate += `
-      // Database interaction to get list of ${name.toLowerCase()}s
-      const data = await fetchDataListFromDB();`
+			listApiTemplate += dbNameList
 		}
 
 		listApiTemplate += `
@@ -56,21 +52,6 @@ generateApi
 
 		// Functions for auth and DB interaction if selected
 		let additionalFunctions = ''
-
-		
-
-		if (options.db) {
-			additionalFunctions += `
-    // Function to interact with PostgreSQL database for a single item
-    const fetchDataFromDB = async (id) => {
-      // Implement database logic here to fetch a single ${name.toLowerCase()}
-    };
-
-    // Function to interact with PostgreSQL database for a list of items
-    const fetchDataListFromDB = async () => {
-      // Implement database logic here to fetch list of ${name.toLowerCase()}s
-    };`
-		}
 
 		// Combine all templates
 		const apiTemplate = `${singleItemApiTemplate}\n\n${listApiTemplate}\n\n${additionalFunctions}`

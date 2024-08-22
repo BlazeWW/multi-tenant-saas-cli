@@ -4,6 +4,9 @@ export const authAwsCognito = `
             // Implement Cognito authentication logic here
       };
 
+      
       // Authenticate with AWS Cognito
       const user = await authenticateUser(event);
+
+      
       `
