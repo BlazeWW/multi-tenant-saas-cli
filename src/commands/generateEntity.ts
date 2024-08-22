@@ -6,10 +6,9 @@ import { input, select } from '@inquirer/prompts'
 import { databaseChoices, yesNoChoices } from '../templates/choices'
 import { entityTemplate } from '../templates/entity'
 
-const generateEntity = new Command()
+const generateEntity = new Command('generate-entity')
 
 generateEntity
-	.command('generate-entity')
 	.description('Generate a TypeORM entity')
 	.action(async () => {
 		const entityName = await input({

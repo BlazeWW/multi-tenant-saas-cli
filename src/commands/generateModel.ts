@@ -3,10 +3,9 @@ import * as fs from 'fs-extra'
 import * as path from 'path'
 import { input, select, confirm } from '@inquirer/prompts'
 
-const generateModel = new Command()
+const generateModel = new Command('generate-model')
 
 generateModel
-	.command('generate-model')
 	.description('Generate a TypeORM entity model and save schema to JSON')
 	.argument('[name]', 'Name of the model (e.g., User, Product)')
 	.action(async (name) => {

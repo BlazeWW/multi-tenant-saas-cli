@@ -2,10 +2,9 @@ import { Command } from 'commander'
 import * as fs from 'fs-extra'
 import * as path from 'path'
 
-const generateCrud = new Command()
+const generateCrud = new Command('generate-crud')
 
 generateCrud
-	.command('generate-crud')
 	.description('Generate CRUD pages in Next.js for a given model')
 	.argument('<model>', 'Name of the model (e.g., User, Product)')
 	.action((model) => {

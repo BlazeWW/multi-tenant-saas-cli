@@ -2,6 +2,7 @@ import { Command } from 'commander'
 import generateApi from './commands/generateApi'
 import generateCrudPage from './commands/generateCrudPage'
 import generateModel from './commands/generateModel'
+import generateEntity from './commands/generateEntity'
 
 const program = new Command()
 
@@ -10,8 +11,9 @@ program
 	.description('CLI for generating multi-tenant SaaS platform components')
 	.version('0.1.0')
 
-program.addCommand(generateApi).name('generate-api')
-program.addCommand(generateCrudPage).name('generate-crud')
-program.addCommand(generateModel).name('generate-model')
+program.addCommand(generateApi)
+program.addCommand(generateCrudPage)
+program.addCommand(generateModel)
+program.addCommand(generateEntity)
 
 program.parse(process.argv)

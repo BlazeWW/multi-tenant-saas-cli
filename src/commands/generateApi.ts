@@ -13,10 +13,9 @@ import {
 } from '../templates/api'
 import { input } from '@inquirer/prompts'
 
-const generateApi = new Command()
+const generateApi = new Command('generate-api')
 
 generateApi
-	.command('generate-api')
 	.description('Generate AWS API endpoints with optional features')
 	.option('-a, --auth', 'Include AWS Cognito authentication')
 	.option('-d, --db', 'Integrate with PostgreSQL database')
