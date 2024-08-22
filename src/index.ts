@@ -4,6 +4,7 @@ import generateCrudPage from './commands/generateCrudPage'
 import generateModel from './commands/generateModel'
 import generateEntity from './commands/generateEntity'
 import generateConfig from './commands/generateConfig'
+import generateMigration from './commands/generateMigration'
 
 const program = new Command()
 
@@ -17,5 +18,6 @@ program.addCommand(generateApi)
 program.addCommand(generateCrudPage)
 program.addCommand(generateModel)
 program.addCommand(generateEntity)
+program.addCommand(generateMigration)
 
 program.parse(process.argv)

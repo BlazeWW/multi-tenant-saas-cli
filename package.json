@@ -9,6 +9,7 @@
 		"gen:crud": "node dist/index.js generate-crud",
 		"gen:model": "node dist/index.js generate-model",
 		"gen:enitity": "node dist/index.js generate-enitity",
+		"gen:migrate": "node dist/index.js generate-migrate",
 		"test": "npx jest"
 	},
 	"keywords": [],
