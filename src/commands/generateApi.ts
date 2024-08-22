@@ -11,7 +11,8 @@ import {
 	apiTemplateUpdate,
 	apiTemplateDelete
 } from '../templates/api'
-import { input } from '@inquirer/prompts'
+import { input, select } from '@inquirer/prompts'
+import { yesNoAuthChoices, yesNoPostgresChoices } from '../templates/choices'
 
 const generateApi = new Command('generate-api')
 
@@ -25,6 +26,24 @@ generateApi
 			message: 'Please enter the name of the API:',
 			validate: (input) => (input ? true : 'API name cannot be empty')
 		})
+
+		// Check if the user provided the --auth option, otherwise prompt them
+		let includeAuth = options.auth
+		if (!includeAuth) {
+			includeAuth = await select({
+				message: 'Would you like to include AWS Cognito authentication?',
+				choices: yesNoAuthChoices
+			})
+		}
+
+		// Check if the user provided the --db option, otherwise prompt them
+		let includeDb = options.db
+		if (!includeDb) {
+			includeDb = await select({
+				message: 'Would you like to integrate with PostgreSQL database?',
+				choices: yesNoPostgresChoices
+			})
+		}
 
 		// Set CRUD operations Templates
 		let singleItemApiTemplate = apiTemplateSingle(name)
@@ -42,8 +61,8 @@ generateApi
 		}
 
 		if (options.db) {
-			singleItemApiTemplate += dbName
-			listApiTemplate += dbNameList
+			singleItemApiTemplate += dbName(name)
+			listApiTemplate += dbNameList(name)
 			// The Create, Update, and Delete templates already assume DB interaction, so no additional snippets needed
 		}
 
