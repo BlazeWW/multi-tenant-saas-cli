@@ -3,13 +3,13 @@
 Compile TypeScript to JavaScript and run the CLI:
 
 ```bash
-npx tsc
+pnpm start
 ```
 
 #### Run Tests
 
 ```bash
-npx jest
+pnpm test
 ```
 
 #### Run a Command
@@ -17,23 +17,23 @@ npx jest
 - Generate an API
 
 ```bash
-node dist/index.js generate-api
+pnpm run gen:api
 ```
 
 - Generate a CRUD Page
 
 ```bash
-node dist/index.js generate-crud
+pnpm run gen:crud
 ```
 
 - Generate an Entity
 
 ```bash
-node dist/index.js generate-entity
+pnpm run gen:entity
 ```
 
 - Generate a Model
 
 ```bash
-node dist/index.js generate-model
+pnpm run gen:model
 ```
