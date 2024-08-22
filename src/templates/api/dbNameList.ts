@@ -8,5 +8,3 @@ const fetchDataListFromDB = async () => {
 	// Implement database logic here to fetch list of names
 }
 ;`
-			
-// ${name.toLowerCase()}

@@ -9,4 +9,3 @@ const fetchDataFromDB = async (id) => {
 
 ;`
 
-// ${name.toLowerCase()}

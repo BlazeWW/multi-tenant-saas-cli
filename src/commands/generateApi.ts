@@ -1,60 +1,65 @@
 import { Command } from 'commander'
 import * as fs from 'fs-extra'
 import * as path from 'path'
-import { authAwsCognito, dbName, dbNameList } from '../templates/api'
+import {
+	authAwsCognito,
+	dbName,
+	dbNameList,
+	apiTemplateSingle,
+	apiTemplateList,
+	apiTemplateCreate,
+	apiTemplateUpdate,
+	apiTemplateDelete
+} from '../templates/api'
+import { input } from '@inquirer/prompts'
 
 const generateApi = new Command()
 
 generateApi
 	.command('generate-api')
 	.description('Generate AWS API endpoints with optional features')
-	.argument('<name>', 'Name of the API')
 	.option('-a, --auth', 'Include AWS Cognito authentication')
 	.option('-d, --db', 'Integrate with PostgreSQL database')
-	.action((name, options) => {
-		// Single item GET endpoint
-		let singleItemApiTemplate = `export const get${name} = async (event) => {
-      // Get single ${name.toLowerCase()} logic here`
+	.action(async (options) => {
+		// Prompt for the name if it isn't provided
+		const name = await input({
+			message: 'Please enter the name of the API:',
+			validate: (input) => (input ? true : 'API name cannot be empty')
+		})
+
+		// Set CRUD operations Templates
+		let singleItemApiTemplate = apiTemplateSingle(name)
+		let listApiTemplate = apiTemplateList(name)
+		let createApiTemplate = apiTemplateCreate(name)
+		let updateApiTemplate = apiTemplateUpdate(name)
+		let deleteApiTemplate = apiTemplateDelete(name)
 
 		if (options.auth) {
 			singleItemApiTemplate += authAwsCognito
+			listApiTemplate += authAwsCognito
+			createApiTemplate += authAwsCognito
+			updateApiTemplate += authAwsCognito
+			deleteApiTemplate += authAwsCognito
 		}
 
 		if (options.db) {
 			singleItemApiTemplate += dbName
-		}
-
-		singleItemApiTemplate += `
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ message: "Single ${name.toLowerCase()} fetched", data }),
-      };
-    };`
-
-		// List GET endpoint
-		let listApiTemplate = `export const list${name}s = async (event) => {
-      // Get list of ${name.toLowerCase()}s logic here`
-
-		if (options.auth) {
-			listApiTemplate += authAwsCognito
-		}
-
-		if (options.db) {
 			listApiTemplate += dbNameList
+			// The Create, Update, and Delete templates already assume DB interaction, so no additional snippets needed
 		}
-
-		listApiTemplate += `
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ message: "List of ${name.toLowerCase()}s fetched", data }),
-      };
-    };`
-
-		// Functions for auth and DB interaction if selected
-		let additionalFunctions = ''
 
 		// Combine all templates
-		const apiTemplate = `${singleItemApiTemplate}\n\n${listApiTemplate}\n\n${additionalFunctions}`
+		const apiTemplate = `
+    ${singleItemApiTemplate}
+
+    ${listApiTemplate}
+
+    ${createApiTemplate}
+
+    ${updateApiTemplate}
+
+    ${deleteApiTemplate}
+    `
 
 		const outputPath = path.resolve(__dirname, `../output/${name}.ts`)
 		fs.outputFileSync(outputPath, apiTemplate)
