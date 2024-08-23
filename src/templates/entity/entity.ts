@@ -10,67 +10,50 @@ interface FieldList {
 }
 
 export const entityTemplate = (entityName: string, fields: FieldList[]) => {
-	let entityTemplate = `
-   import { Entity, PrimaryGeneratedColumn, Column, OneToOne, OneToMany, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
+	const importsSet = new Set<string>()
+	importsSet.add('Entity') // Always needed
+	importsSet.add('PrimaryGeneratedColumn') // Always needed
+	importsSet.add('Column') // Default case
 
-  @Entity()
-  export class ${entityName} {
-    @PrimaryGeneratedColumn()
-    id: number;\n`
+	let entityTemplate = `\n@Entity()\nexport class ${entityName} {\n  @PrimaryGeneratedColumn()\n  id: number;\n`
 
-	fields.map(
-		({
-			fieldName,
-			fieldType,
-			relatedEntity,
-			nullable,
-			length,
-			unique,
-			default: defaultValue,
-			index
-		}) => {
-			const columnOptions = []
-			if (length) columnOptions.push(`length: ${length}`)
-			if (nullable === 'Yes') columnOptions.push('nullable: true')
-			if (nullable === 'No') columnOptions.push('nullable: false')
-			if (unique) columnOptions.push('unique: true')
-			if (index) columnOptions.push('index: true')
-			if (defaultValue !== undefined)
-				columnOptions.push(
-					`default: ${
-						typeof defaultValue === 'string'
-							? `'${defaultValue}'`
-							: defaultValue
-					}`
-				)
-
-			switch (fieldType) {
-				case 'one-to-one':
-					entityTemplate += `
-    @OneToOne(() => ${relatedEntity})
-    @JoinColumn()
-    ${fieldName}: ${relatedEntity};\n`
-					break
-				case 'one-to-many':
-					entityTemplate += `
-    @OneToMany(() => ${relatedEntity}, ${relatedEntity?.toLowerCase()} => ${relatedEntity?.toLowerCase()}.${entityName.toLowerCase()})
-    ${relatedEntity?.toLowerCase()}s: ${relatedEntity}[];\n`
-					break
-				case 'many-to-many':
-					entityTemplate += `
-    @ManyToMany(() => ${relatedEntity})
-    @JoinTable()
-    ${relatedEntity?.toLowerCase()}s: ${relatedEntity}[];\n`
-					break
-				default:
-					entityTemplate += `
-    @Column({${columnOptions.join(', ')}})
-    ${fieldName}: ${fieldType};\n`
-			}
+	fields.forEach(({ fieldName, fieldType }) => {
+		switch (fieldType) {
+			case 'one-to-one':
+				importsSet.add('OneToOne')
+				importsSet.add('JoinColumn')
+				entityTemplate += `
+  @OneToOne(() => ${fieldName})
+  @JoinColumn()
+  ${fieldName}: ${fieldName};\n`
+				break
+			case 'one-to-many':
+				importsSet.add('OneToMany')
+				entityTemplate += `
+  @OneToMany(() => ${fieldName}, ${fieldName.toLowerCase()} => ${fieldName.toLowerCase()}.${entityName.toLowerCase()})
+  ${fieldName.toLowerCase()}s: ${fieldName}[];\n`
+				break
+			case 'many-to-many':
+				importsSet.add('ManyToMany')
+				importsSet.add('JoinTable')
+				entityTemplate += `
+  @ManyToMany(() => ${fieldName})
+  @JoinTable()
+  ${fieldName.toLowerCase()}s: ${fieldName}[];\n`
+				break
+			default:
+				entityTemplate += `
+  @Column()
+  ${fieldName}: ${fieldType};\n`
 		}
-	)
+	})
 
 	entityTemplate += '\n}'
 
-	return entityTemplate
+	// Construct the import statement based on the used decorators
+	const importStatement = `import { ${[...importsSet].join(
+		', '
+	)} } from 'typeorm';\n`
+
+	return importStatement + entityTemplate
 }
