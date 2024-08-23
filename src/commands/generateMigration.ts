@@ -3,6 +3,7 @@ import * as child_process from 'node:child_process'
 import { input, select } from '@inquirer/prompts'
 import * as path from 'path'
 import { yesNoChoices } from '../templates/choices'
+import { generateRandomName } from '../functions'
 
 const generateMigration = new Command('generate-migration')
 
@@ -11,10 +12,14 @@ generateMigration
 		'Generate a TypeORM migration script based on the current entities'
 	)
 	.action(async () => {
-		const migrationName = await input({
-			message: 'Enter a name for the migration:',
-			validate: (input) => (input ? true : 'Migration name cannot be empty')
+		let migrationName = await input({
+			message: 'Enter a name for the migration (leave empty for random name):'
 		})
+
+		if (!migrationName) {
+			migrationName = generateRandomName()
+			console.log(`No name provided. Using generated name: ${migrationName}`)
+		}
 
 		const runAfterGeneration = await select({
 			message: 'Do you want to run the migration immediately after generation?',
