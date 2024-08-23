@@ -4,15 +4,29 @@
 	"description": "",
 	"main": "dist/index.js",
 	"scripts": {
-		"start": "node tsc && node dist/index.js generate-config",
-		"gen:api": "node dist/index.js generate-api",
-		"gen:crud": "node dist/index.js generate-crud",
-		"gen:model": "node dist/index.js generate-model",
-		"gen:enitity": "node dist/index.js generate-enitity",
-		"gen:migrate": "node dist/index.js generate-migrate",
-		"test": "npx jest"
+		"build": "tsc",
+		"clean": "rm -rf dist coverage",
+		"prepare": "npm run build",
+		"start": "npm run build && node dist/index.js generate-config",
+		"gen:api": "npm run build && node dist/index.js generate-api",
+		"gen:crud": "npm run build && node dist/index.js generate-crud",
+		"gen:model": "npm run build && node dist/index.js generate-model",
+		"gen:entity": "npm run build && node dist/index.js generate-entity",
+		"gen:migrate": "npm run build && node dist/index.js generate-migrate",
+		"test": "npm run build && jest --passWithNoTests",
+		"test:watch": "jest --watch",
+		"lint": "eslint . --ext .ts",
+		"prebuild": "npm run clean",
+		"typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
 	},
-	"keywords": [],
+	"keywords": [
+		"CLI",
+		"SaaS",
+		"TypeORM",
+		"CRUD",
+		"API",
+		"multi-tenant"
+	],
 	"author": "Blaze Web Works",
 	"license": "MIT",
 	"dependencies": {
@@ -35,5 +49,29 @@
 		"jest": "^29.7.0",
 		"ts-jest": "^29.2.4",
 		"typescript": "^5.5.4"
+	},
+	"engines": {
+		"node": ">=22.6.0",
+		"npm": ">=10.8.2",
+		"pnpm": ">=9.8.0"
+	},
+	"jest": {
+		"preset": "ts-jest",
+		"testEnvironment": "node",
+		"collectCoverage": true,
+		"coverageDirectory": "./coverage",
+		"coverageReporters": [
+			"text",
+			"lcov"
+		],
+		"moduleFileExtensions": [
+			"ts",
+			"js",
+			"json"
+		],
+		"testMatch": [
+			"**/__tests__/**/*.ts",
+			"**/?(*.)+(spec|test).ts"
+		]
 	}
 }
