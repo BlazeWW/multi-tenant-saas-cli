@@ -37,6 +37,7 @@
 		"fs-extra": "^11.2.0",
 		"path": "^0.12.7",
 		"pg": "^8.12.0",
+		"pluralize": "^8.0.0",
 		"reflect-metadata": "^0.2.2",
 		"typeorm": "^0.3.20"
 	},
