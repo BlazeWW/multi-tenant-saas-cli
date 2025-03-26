@@ -1,4 +1,4 @@
-import { singularizeIt } from '../functions'
+import { singularizeIt } from '../../functions'
 
 describe('singularizeIt', () => {
 	it('should singularize plural words', () => {

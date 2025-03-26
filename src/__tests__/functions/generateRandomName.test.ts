@@ -1,5 +1,5 @@
-import { generateRandomName } from '../functions'
-import { adjectives, nouns } from '../lists'
+import { generateRandomName } from '../../functions'
+import { adjectives, nouns } from '../../lists'
 
 describe('generateRandomName', () => {
 	beforeAll(() => {
